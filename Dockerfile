@@ -12,3 +12,10 @@ RUN echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula selec
 RUN apt-get install -y ttf-mscorefonts-installer fondu
 COPY Fonts /tmp/macfonts
 RUN cd /tmp/macfonts && fondu -f *.dfont && mkdir -p /usr/share/fonts/truetype/macfonts/ && mv *.ttf /usr/share/fonts/truetype/macfonts/ && fc-cache -fv && rm -rf /tmp/macfonts
+RUN cp /usr/src/php/php.ini-production /usr/local/etc/php/php.ini
+RUN \
+    sed -i 's/max_input_time = 30/max_input_time = 60/g' /usr/local/etc/php/php.ini && \
+    sed -i 's/max_execution_time = 30/max_execution_time = 60/g' /usr/local/etc/php/php.ini && \
+    sed -i 's/memory_limit = 128M/memory_limit = 256M/g' /usr/local/etc/php/php.ini && \
+    sed -i 's/post_max_size = 8M/post_max_size = 16M/g' /usr/local/etc/php/php.ini && \
+    sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 16M/g' /usr/local/etc/php/php.ini
